@@ -36,7 +36,7 @@ fun ListViewFloatingActionButton(
         mutableStateOf("")
     }
 
-    FloatingActionButton(onClick = { }, content = {
+    FloatingActionButton(onClick = { showDialog = true}, content = {
         Icon(imageVector = Icons.Default.Add, contentDescription = "Add icon")
     })
 

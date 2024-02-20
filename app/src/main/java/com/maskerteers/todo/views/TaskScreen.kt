@@ -15,11 +15,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maskerteers.todo.data.TaskList
+import com.maskerteers.todo.viewmodels.TodoViewModel
 
 /**
  * PROJECT NAME: TODO
@@ -33,19 +39,26 @@ import com.maskerteers.todo.data.TaskList
 @Composable
 fun TaskScreen() {
 
+    val viewmodel : TodoViewModel = viewModel()
+    val viewModelTasks = viewmodel.readList().toList()
+    var tasks by remember { mutableStateOf(viewModelTasks) }
+
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = "TODO App") })
     }, content = {
         TaskScreenContent(
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize(), tasks = emptyList()
+                .fillMaxSize(),
+            tasks = tasks
         )
     }, floatingActionButton = {
-        ListViewFloatingActionButton(title = "What would you like to do today?",
-            inputHint = "Add you task",
+        ListViewFloatingActionButton(
+            title = "What would you like to do today?",
+            inputHint = "Add your task",
             onFabClick = {
-
+                tasks = (tasks + TaskList(it))
+                viewmodel.saveList(TaskList(it))
             })
     })
 }
