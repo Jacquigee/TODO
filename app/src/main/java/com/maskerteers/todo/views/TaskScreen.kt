@@ -15,16 +15,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.maskerteers.todo.data.TaskList
+import com.maskerteers.todo.data.Task
 import com.maskerteers.todo.viewmodels.TodoViewModel
 
 /**
@@ -37,11 +36,10 @@ import com.maskerteers.todo.viewmodels.TodoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskScreen() {
+fun TaskScreen(viewModel: TodoViewModel) {
 
-    val viewmodel: TodoViewModel = viewModel()
-    val viewModelTasks = viewmodel.readList().toList()
-    var tasks by remember { mutableStateOf(viewModelTasks) }
+    var allTasks = viewModel.tasks.collectAsState()
+    var tasks by remember { mutableStateOf(allTasks) }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "TODO App") }) },
@@ -50,7 +48,7 @@ fun TaskScreen() {
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize(),
-                tasks = tasks
+                tasks = tasks.value
             )
         },
         floatingActionButton = {
@@ -58,14 +56,13 @@ fun TaskScreen() {
                 title = "What would you like to do today?",
                 inputHint = "Add your task",
                 onFabClick = {
-                    tasks = (tasks + TaskList(it))
-                    viewmodel.saveList(TaskList(it))
+                    viewModel.saveList(Task(name = it))
                 })
         })
 }
 
 @Composable
-fun TaskScreenContent(modifier: Modifier, tasks: List<TaskList>) {
+fun TaskScreenContent(modifier: Modifier, tasks: List<Task>) {
     if (tasks.isEmpty()) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -90,8 +87,8 @@ fun TaskScreenContent(modifier: Modifier, tasks: List<TaskList>) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    TaskScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DefaultPreview() {
+//    TaskScreen(vi)
+//}
