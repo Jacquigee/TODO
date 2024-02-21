@@ -39,28 +39,29 @@ import com.maskerteers.todo.viewmodels.TodoViewModel
 @Composable
 fun TaskScreen() {
 
-    val viewmodel : TodoViewModel = viewModel()
+    val viewmodel: TodoViewModel = viewModel()
     val viewModelTasks = viewmodel.readList().toList()
     var tasks by remember { mutableStateOf(viewModelTasks) }
 
-    Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "TODO App") })
-    }, content = {
-        TaskScreenContent(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
-            tasks = tasks
-        )
-    }, floatingActionButton = {
-        ListViewFloatingActionButton(
-            title = "What would you like to do today?",
-            inputHint = "Add your task",
-            onFabClick = {
-                tasks = (tasks + TaskList(it))
-                viewmodel.saveList(TaskList(it))
-            })
-    })
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(text = "TODO App") }) },
+        content = {
+            TaskScreenContent(
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize(),
+                tasks = tasks
+            )
+        },
+        floatingActionButton = {
+            ListViewFloatingActionButton(
+                title = "What would you like to do today?",
+                inputHint = "Add your task",
+                onFabClick = {
+                    tasks = (tasks + TaskList(it))
+                    viewmodel.saveList(TaskList(it))
+                })
+        })
 }
 
 @Composable
@@ -86,14 +87,11 @@ fun TaskScreenContent(modifier: Modifier, tasks: List<TaskList>) {
                 }
             })
     }
-
 }
 
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-
     TaskScreen()
-
 }

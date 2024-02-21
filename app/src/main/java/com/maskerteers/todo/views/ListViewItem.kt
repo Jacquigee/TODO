@@ -1,11 +1,10 @@
 package com.maskerteers.todo.views
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,21 +22,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ListViewItem(value: String) {
-
-    Surface(modifier = Modifier
-        .fillMaxWidth()
-        .padding(10.dp),
-        shape = RoundedCornerShape(10),
-        color = Color.LightGray) {
-        Column(
-            modifier = Modifier.padding(10.dp)
-        ) {
-            Text(text = value, modifier = Modifier.padding(4.dp))
-        }
-        Spacer(modifier = Modifier.padding(8.dp))
-
+    Column(
+        modifier = Modifier.padding(10.dp)
+            .fillMaxWidth()
+            .background(Color.LightGray, shape = RoundedCornerShape(4.dp))
+    ) {
+        Text(text = value, modifier = Modifier.padding(8.dp))
     }
-
 }
 
 @Preview(showBackground = true, showSystemUi = true)
