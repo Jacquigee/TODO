@@ -14,16 +14,14 @@ class TaskRepositoryImpl(context: Context) {
     private val appDatabase = AppDatabase.getDatabaseInstance(context)
     suspend fun saveTask(task: Task) {
         try {
-            Log.e("KUAPP: ", "Repo saveTask() $task")
             appDatabase.taskDao().saveTask(task)
         } catch (e: Exception) {
             Log.e("KUAPP:", " Error ${e.message.toString()}")
         }
     }
 
-    suspend fun getTasks(): Flow<List<Task>> {
+    fun getTasks(): Flow<List<Task>> {
         val tasks = appDatabase.taskDao().getTasks()
-        Log.e("KUAPP: ", "Repo getTasks() $tasks")
         return tasks
     }
 }

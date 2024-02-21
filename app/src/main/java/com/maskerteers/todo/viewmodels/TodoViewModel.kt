@@ -35,7 +35,6 @@ class TodoViewModel(context: Context) : ViewModel() {
     }
 
     fun saveList(task: Task){
-        Log.e("KUAPP: ", "VM saveTask() $task")
         viewModelScope.launch {
             taskRepositoryImpl.saveTask(task)
         }
@@ -46,7 +45,6 @@ class TodoViewModel(context: Context) : ViewModel() {
             taskRepositoryImpl.getTasks().collect(){
                 _tasks.value = it
             }
-            Log.e("KUAPP: ", "VM readList() ${tasks.value}")
         }
     }
 }
