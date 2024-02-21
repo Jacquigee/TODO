@@ -1,5 +1,9 @@
 package com.maskerteers.todo.data
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 /**
  * PROJECT NAME: TODO
  * USER        : jacqui
@@ -10,8 +14,14 @@ package com.maskerteers.todo.data
 
 
 /**
- * [TaskList] is a data class that represents the values needed on a single task.
+ * [Task] is a data class that represents the values needed on a single task.
  * [name] is a value of type string that will be used to store the name of the task.
  * [taskList] is a value of type list which takes in a list of tasks. The value will be used to hold the list of tasks on the list screen.
  */
-data class TaskList(val name: String, val taskList: List<String> = listOf())
+@Entity
+data class Task(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    @ColumnInfo(name = "task_name")
+    var name: String
+)

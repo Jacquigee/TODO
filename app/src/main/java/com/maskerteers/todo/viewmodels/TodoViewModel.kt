@@ -1,7 +1,14 @@
 package com.maskerteers.todo.viewmodels
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.maskerteers.todo.data.TaskList
+import androidx.lifecycle.viewModelScope
+import com.maskerteers.todo.data.Task
+import com.maskerteers.todo.data.TaskRepositoryImpl
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * PROJECT NAME: TODO
@@ -11,14 +18,35 @@ import com.maskerteers.todo.data.TaskList
  * TIME        : 10:55 AM
  */
 
-class TodoViewModel : ViewModel() {
+class TodoViewModel(context: Context) : ViewModel() {
 
-    fun saveList(list: TaskList){
+    /**
+     * Manually initializing Repo and passing context not recommended
+     * This was only done for the purposes of showing a simple Room implementation flow
+     * ToDo: Use Dependency Injection instead (Consider Hilt, Koin)
+     */
+    val taskRepositoryImpl = TaskRepositoryImpl(context)
 
+    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
+    val tasks get() = _tasks.asStateFlow()
+
+    init {
+        readList()
     }
 
-    fun readList(): ArrayList<TaskList>{
-        val taskList = ArrayList<TaskList>()
-        return taskList
+    fun saveList(task: Task){
+        Log.e("KUAPP: ", "VM saveTask() $task")
+        viewModelScope.launch {
+            taskRepositoryImpl.saveTask(task)
+        }
+    }
+
+    fun readList() {
+        viewModelScope.launch {
+            taskRepositoryImpl.getTasks().collect(){
+                _tasks.value = it
+            }
+            Log.e("KUAPP: ", "VM readList() ${tasks.value}")
+        }
     }
 }
